@@ -315,7 +315,7 @@ struct lib_cc_decode* init_cc_decode (struct ccx_decoders_common_settings_t *set
 		setting->output_format==CCX_OF_SAMI ||
 		setting->output_format==CCX_OF_SRT ||
 		setting->output_format==CCX_OF_SSA ||
-		setting->output_format == CCX_OF_WEBVTT ||
+		setting->output_format == CCX_OF_WEBVTT||
 		setting->output_format==CCX_OF_TRANSCRIPT ||
 		setting->output_format==CCX_OF_SPUPNG ||
 		setting->output_format==CCX_OF_SIMPLE_XML ||
@@ -377,7 +377,7 @@ void flush_cc_decode(struct lib_cc_decode *ctx, struct cc_subtitle *sub)
 			if (ctx->write_format==CCX_OF_SMPTETT || ctx->write_format==CCX_OF_SAMI ||
 					ctx->write_format==CCX_OF_SRT || ctx->write_format==CCX_OF_TRANSCRIPT ||
 					ctx->write_format == CCX_OF_WEBVTT || ctx->write_format == CCX_OF_SPUPNG ||
-					ctx->write_format == CCX_OF_SSA)
+					ctx->write_format == CCX_OF_SSA || ctx->write_format == CCX_OF_G608)
 			{
 				flush_608_context(ctx->context_cc608_field_1, sub);
 			}
@@ -392,7 +392,7 @@ void flush_cc_decode(struct lib_cc_decode *ctx, struct cc_subtitle *sub)
 			if (ctx->write_format == CCX_OF_SMPTETT || ctx->write_format == CCX_OF_SAMI ||
 					ctx->write_format == CCX_OF_SRT || ctx->write_format == CCX_OF_TRANSCRIPT ||
 					ctx->write_format == CCX_OF_WEBVTT || ctx->write_format == CCX_OF_SPUPNG ||
-					ctx->write_format == CCX_OF_SSA)
+					ctx->write_format == CCX_OF_SSA || ctx->write_format == CCX_OF_G608)
 			{
 				flush_608_context(ctx->context_cc608_field_2, sub);
 			}
