@@ -491,6 +491,7 @@ void print_usage (void)
 	mprint ("                       affects Teletext in timed transcript with -datets.\n");
 	mprint ("           --noscte20: Ignore SCTE-20 data if present.\n");
 	mprint ("  --webvtt-create-css: Create a separate file for CSS instead of inline.\n");
+	mprint ("      --webvtt-no-css: Do not include the css header in vtt ouput.\n");
 	mprint ("              -deblev: Enable debug so the calculated distance for each two\n");
 	mprint ("                       strings is displayed. The output includes both strings,\n");
 	mprint ("                       the calculated distance, the maximum allowed distance,\n");
@@ -1618,6 +1619,11 @@ int parse_parameters (struct ccx_s_options *opt, int argc, char *argv[])
 		if (strcmp (argv[i],"--webvtt-create-css")==0)
 		{
 			opt->webvtt_create_css = 1;
+			continue;
+		}
+		if (strcmp (argv[i],"--webvtt-no-css")==0)
+		{
+			opt->webvtt_no_css = 1;
 			continue;
 		}
 		if (strcmp (argv[i],"-noru")==0 ||
