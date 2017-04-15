@@ -118,6 +118,11 @@ static const char *webvtt_inline_css = "/* default values */\n"
 static const char** webvtt_pac_row_percent[] = { "10", "15.33", "20.66", "26", "31.33", "36.66", "42",
 		"47.33", "52.66", "58", "63.33", "68.66", "74", "79.33", "84.66" };
 
+static const char** webvtt_pac_col_percent[] = { "0.0", "2.5", "5.0", "7.5", "10.0", "12.5", "15.0",
+		"17.5", "20.0", "22.5", "25.0", "27.5", "30.0", "32.5", "35.0", "37.5", "40.0", "42.5",
+		"45.0", "47.5", "50.0", "52.5", "55.0", "57.5", "60.0", "62.5", "65.0", "67.5", "70.0",
+		"72.5", "75.0", "77.5"};
+
 /* The timing here is not PTS based, but output based, i.e. user delay must be accounted for
 if there is any */
 int write_stringz_as_webvtt(char *string, struct encoder_ctx *context, LLONG ms_start, LLONG ms_end)
@@ -465,8 +470,17 @@ int write_cc_buffer_as_webvtt(struct eia608_screen *data, struct encoder_ctx *co
 		{
 			char timeline[128] = "";
 
-			sprintf(timeline, "%02u:%02u:%02u.%03u --> %02u:%02u:%02u.%03u line:%s%%%s",
-				h1, m1, s1, ms1, h2, m2, s2, ms2, webvtt_pac_row_percent[i], context->encoded_crlf);
+			int length = get_line_encoded(context, context->subline, i, data);
+			int col = length-1;
+			for (int j = 0; j < length; j++)
+			{
+				if (context->subline[j] != ' ') {
+					col = j;
+					break;
+				}
+			}
+			sprintf(timeline, "%02u:%02u:%02u.%03u --> %02u:%02u:%02u.%03u line:%s%% position:%s%%,line-left align:start%s",
+				h1, m1, s1, ms1, h2, m2, s2, ms2, webvtt_pac_row_percent[i], webvtt_pac_col_percent[col], context->encoded_crlf);
 			used = encode_line(context, context->buffer, (unsigned char *)timeline);
 
 			dbg_print(CCX_DMT_DECODER_608, "\n- - - WEBVTT caption - - -\n");
@@ -475,8 +489,6 @@ int write_cc_buffer_as_webvtt(struct eia608_screen *data, struct encoder_ctx *co
 			written = write(context->out->fh, context->buffer, used);
 			if (written != used)
 				return -1;
-
-			int length = get_line_encoded(context, context->subline, i, data);
 
 			if (context->encoding != CCX_ENC_UNICODE)
 			{
@@ -522,8 +534,9 @@ int write_cc_buffer_as_webvtt(struct eia608_screen *data, struct encoder_ctx *co
 					}
 				}
 
-				// write current text symbol
-				write(context->out->fh, &(context->subline[j]), 1);
+				// write current text symbol if we are past padding
+				if (j >= col)
+					write(context->out->fh, &(context->subline[j]), 1);
 
 				if (ccx_options.use_webvtt_styling)
 				{
