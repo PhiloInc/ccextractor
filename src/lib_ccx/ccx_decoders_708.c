@@ -84,7 +84,7 @@ struct CCX_DTVCC_S_COMMANDS_C1 DTVCC_COMMANDS_C1[32] =
 
 //------------------------- DEFAULT AND PREDEFINED -----------------------------
 
-ccx_dtvcc_pen_color ccx_dtvcc_default_pen_color =
+const ccx_dtvcc_pen_color ccx_dtvcc_default_pen_color =
 {
 	0x3f,
 	0,
@@ -93,7 +93,7 @@ ccx_dtvcc_pen_color ccx_dtvcc_default_pen_color =
 	0
 };
 
-ccx_dtvcc_pen_attribs ccx_dtvcc_default_pen_attribs =
+const ccx_dtvcc_pen_attribs ccx_dtvcc_default_pen_attribs =
 {
 	CCX_DTVCC_PEN_SIZE_STANDART,
 	0,
