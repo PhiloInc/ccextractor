@@ -1028,16 +1028,6 @@ void slice_header (struct lib_cc_decode *ctx, unsigned char *heabuf, unsigned ch
 		ctx->avc_ctx->lastmaxidx = -1;
 	}
 
-
-	// Sometimes two P-slices follow each other, see garbled_dishHD.mpg,
-	// in this case we only treat the first as a reference pic
-	if (isref && ctx->frames_since_last_gop <= 3) // Used to be == 1, but the sample file
-	{ // 2014 SugarHouse Casino Mummers Parade Fancy Brigades_new.ts was garbled
-		// Probably doing a proper PTS sort would be a better solution.
-		isref = 0;
-		dbg_print(CCX_DMT_TIME, "Ignoring this reference pic.\n");
-	}
-
 	// if slices are buffered - flush
 	if (isref)
 	{
